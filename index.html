@@ -2,56 +2,80 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>MotionBox</title>
+  <title>CSS Motion Lab</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
       color: #eee;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem;
       min-height: 100vh;
+      padding: 2rem;
     }
 
     h1 {
-      margin-bottom: 1rem;
-      color: #00f5d4;
-      text-shadow: 0 0 10px #00f5d4;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, #00f5d4, #00bbf9, #ff4d6d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 245, 212, 0.4);
     }
 
     .container {
       display: flex;
       gap: 2rem;
       width: 100%;
-      max-width: 1000px;
+      max-width: 1100px;
+      flex-wrap: wrap;
     }
 
     .controls {
       flex: 1;
-      background: #0f3460;
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      min-width: 280px;
     }
 
     .controls label {
       display: block;
       margin-top: 1rem;
       font-size: 0.9rem;
-      color: #eee;
     }
 
     .controls input,
     .controls select {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.6rem;
       margin-top: 0.3rem;
-      border-radius: 0.5rem;
+      border-radius: 0.6rem;
       border: none;
-      background: #1a1a40;
+      background: #1b2a41;
       color: #eee;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.9rem 1.2rem;
+      width: 100%;
+      background: linear-gradient(90deg, #00f5d4, #00bbf9);
+      border: none;
+      border-radius: 0.8rem;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #111;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
     }
 
     .preview {
@@ -59,15 +83,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #0f3460;
-      border-radius: 1rem;
-      box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       min-height: 400px;
     }
 
     .box {
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       background: #00f5d4;
       border-radius: 1rem;
       display: flex;
@@ -75,19 +100,56 @@
       align-items: center;
       font-weight: bold;
       color: #111;
+      font-size: 1.2rem;
     }
 
-    @keyframes move {
-      0%   { transform: translateY(0) scale(1); background:#00f5d4; }
-      50%  { transform: translateY(-150px) scale(1.2); background:#ff4d6d; }
-      100% { transform: translateY(0) scale(1); background:#00f5d4; }
+    /* === Keyframes === */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-150px); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(10deg); }
+      75% { transform: rotate(-10deg); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(-200px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <h1>🎨 CSS Animation Playground</h1>
+  <h1>⚡ CSS Motion Lab</h1>
   <div class="container">
     <div class="controls">
+      <label>Animation-Typ:
+        <select id="animationType">
+          <option value="bounce">Bounce</option>
+          <option value="rotate">Rotate</option>
+          <option value="pulse">Pulse</option>
+          <option value="wiggle">Wiggle</option>
+          <option value="spin">Spin 3D</option>
+          <option value="slide">Slide In</option>
+        </select>
+      </label>
       <label>Dauer (Sekunden): 
         <input type="number" id="duration" value="2" min="0.1" step="0.1">
       </label>
@@ -106,17 +168,7 @@
       <label>Wiederholungen: 
         <input type="text" id="iterations" value="infinite">
       </label>
-      <button id="apply" style="
-        margin-top:1.5rem;
-        padding:0.8rem 1.2rem;
-        background:#00f5d4;
-        border:none;
-        border-radius:0.5rem;
-        font-weight:bold;
-        cursor:pointer;
-        width:100%;
-        color:#111;
-      ">Animation starten</button>
+      <button id="apply">🚀 Animation starten</button>
     </div>
     <div class="preview">
       <div class="box">Box</div>
@@ -128,6 +180,7 @@
     const applyBtn = document.getElementById('apply');
 
     applyBtn.addEventListener('click', () => {
+      const animType = document.getElementById('animationType').value;
       const duration = document.getElementById('duration').value;
       const delay = document.getElementById('delay').value;
       const timing = document.getElementById('timing').value;
@@ -135,8 +188,8 @@
 
       // Reset animation
       box.style.animation = 'none';
-      void box.offsetWidth; // Trick to force reflow
-      box.style.animation = `move ${duration}s ${timing} ${delay}s ${iterations}`;
+      void box.offsetWidth; // reflow
+      box.style.animation = `${animType} ${duration}s ${timing} ${delay}s ${iterations}`;
     });
   </script>
 </body>
