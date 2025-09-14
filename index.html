@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>MotionBox</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #eee;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      color: #00f5d4;
+      text-shadow: 0 0 10px #00f5d4;
+    }
+
+    .container {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .controls {
+      flex: 1;
+      background: #0f3460;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
+    }
+
+    .controls label {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #eee;
+    }
+
+    .controls input,
+    .controls select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border-radius: 0.5rem;
+      border: none;
+      background: #1a1a40;
+      color: #eee;
+    }
+
+    .preview {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f3460;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0, 245, 212, 0.2);
+      min-height: 400px;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      background: #00f5d4;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: #111;
+    }
+
+    @keyframes move {
+      0%   { transform: translateY(0) scale(1); background:#00f5d4; }
+      50%  { transform: translateY(-150px) scale(1.2); background:#ff4d6d; }
+      100% { transform: translateY(0) scale(1); background:#00f5d4; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 CSS Animation Playground</h1>
+  <div class="container">
+    <div class="controls">
+      <label>Dauer (Sekunden): 
+        <input type="number" id="duration" value="2" min="0.1" step="0.1">
+      </label>
+      <label>Verzögerung (Sekunden): 
+        <input type="number" id="delay" value="0" min="0" step="0.1">
+      </label>
+      <label>Timing-Funktion: 
+        <select id="timing">
+          <option value="ease">ease</option>
+          <option value="linear">linear</option>
+          <option value="ease-in">ease-in</option>
+          <option value="ease-out">ease-out</option>
+          <option value="ease-in-out">ease-in-out</option>
+        </select>
+      </label>
+      <label>Wiederholungen: 
+        <input type="text" id="iterations" value="infinite">
+      </label>
+      <button id="apply" style="
+        margin-top:1.5rem;
+        padding:0.8rem 1.2rem;
+        background:#00f5d4;
+        border:none;
+        border-radius:0.5rem;
+        font-weight:bold;
+        cursor:pointer;
+        width:100%;
+        color:#111;
+      ">Animation starten</button>
+    </div>
+    <div class="preview">
+      <div class="box">Box</div>
+    </div>
+  </div>
+
+  <script>
+    const box = document.querySelector('.box');
+    const applyBtn = document.getElementById('apply');
+
+    applyBtn.addEventListener('click', () => {
+      const duration = document.getElementById('duration').value;
+      const delay = document.getElementById('delay').value;
+      const timing = document.getElementById('timing').value;
+      const iterations = document.getElementById('iterations').value;
+
+      // Reset animation
+      box.style.animation = 'none';
+      void box.offsetWidth; // Trick to force reflow
+      box.style.animation = `move ${duration}s ${timing} ${delay}s ${iterations}`;
+    });
+  </script>
+</body>
+</html>
